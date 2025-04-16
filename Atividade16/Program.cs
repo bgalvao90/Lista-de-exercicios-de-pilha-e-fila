@@ -1,39 +1,66 @@
 ﻿class Deque
 {
-    Queue<int> queue = new Queue<int>();
-    Queue<Queue<int>> queueAux = new Queue<Queue<int>>();
+    Queue<int> fila = new Queue<int>();
 
-    public void Enqueue(int item)
+   public void InserirTras(int valor)
     {
-        queue.Enqueue(item);
-        var itemAux = new Queue<int>(queue);
-        queueAux.Enqueue(itemAux);
-    }
-    public void Dequeue()
-    {
-        if (queue.Count == 0 && queueAux.Count == 0)
-            throw new InvalidOperationException("A fila está vazia.");
-        queue.Dequeue();
-        queueAux.Dequeue();
-
+        fila.Enqueue(valor);
     }
 
+    public void InserirFrente(int valor)
+    {
+     Queue<int> filaNova = new Queue<int>();
+        filaNova.Enqueue(valor);
+        foreach (var item in fila)
+        {
+            filaNova.Enqueue(item);
+        }
+        fila = filaNova;
+    }
+
+    public void RemoverFrente()
+    {
+        if (fila.Count == 0)
+        {
+            Console.WriteLine("Deque vazio");
+            return;
+        }
+        else
+        {
+            int removido = fila.Dequeue();
+            Console.WriteLine("Removido: " + removido);
+        }
+    }
+
+    public void RemoverTras()
+    {
+        if (fila.Count == 0)
+        {
+            Console.WriteLine("Deque vazio");
+            return;
+        }
+        else
+        {
+            Queue<int> filaNova = new Queue<int>();
+            int removido = -1;
+            while (fila.Count > 1)
+            {
+                filaNova.Enqueue(fila.Dequeue());
+            }
+            removido = fila.Dequeue();
+            fila = filaNova;
+            Console.WriteLine("Removido: " + removido);
+        }
+    }
     public void MostrarFila()
     {
         Console.WriteLine("Fila atual:");
-        foreach (var item in queue)
+        foreach (var item in fila)
         {
             Console.Write(item + " ");
         }
         Console.WriteLine();
-        Console.WriteLine("Fila Secundaria: ");
-        foreach (var item in queueAux)
-        {
-            Console.Write(item + " ");
-            
-        }
-
-
+        
     }
 
 }
@@ -43,11 +70,17 @@ class Program
     static void Main(string[] args)
     {
         Deque deque = new Deque();
-        deque.Enqueue(1);
-        deque.Enqueue(2);
-        deque.Enqueue(3);
+
+        deque.InserirTras(10);
+        deque.InserirFrente(5);
+        deque.InserirTras(20);
+        deque.InserirFrente(1);
+
         deque.MostrarFila();
-        deque.Dequeue();
+
+        deque.RemoverFrente();
+        deque.RemoverTras();
+
         deque.MostrarFila();
     }
 }
